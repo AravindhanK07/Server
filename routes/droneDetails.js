@@ -4,6 +4,7 @@ const db = require("../config/db.js");
 
 router.post("/add-drone", (req, res) => {
   const {
+    drone_id,
     model,
     latitude,
     longitude,
@@ -18,13 +19,14 @@ router.post("/add-drone", (req, res) => {
   } = req.body;
 
   const query = `
-      INSERT INTO drones (model, latitude, longitude, altitude, battery_level, task_status, spray_amount_left, seed_amount_left, flight_duration, speed, task_completion_rate)
+      INSERT INTO drones (drone_id,model, latitude, longitude, altitude, battery_level, task_status, spray_amount_left, seed_amount_left, flight_duration, speed, task_completion_rate)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
   db.query(
     query,
     [
+      drone_id,
       model,
       latitude,
       longitude,
@@ -61,8 +63,8 @@ router.get("/drones", (req, res) => {
   });
 });
 
-router.get("/drones/:id", (req, res) => {
-  const droneId = req.params.id;
+router.get("/drones/:drone_id", (req, res) => {
+  const droneId = req.params.drone_id;
 
   const query = "SELECT * FROM drones WHERE id = ?";
 
@@ -78,9 +80,10 @@ router.get("/drones/:id", (req, res) => {
   });
 });
 
-router.put("/update-drone/:id", (req, res) => {
-  const droneId = req.params.id;
+router.put("/update-drone/:drone_id", (req, res) => {
+  const droneId = req.params.drone_id;
   const {
+    drone_id,
     model,
     latitude,
     longitude,
@@ -95,13 +98,14 @@ router.put("/update-drone/:id", (req, res) => {
   } = req.body;
 
   const query = `
-      UPDATE drones SET model = ?, latitude = ?, longitude = ?, altitude = ?, battery_level = ?, task_status = ?, spray_amount_left = ?, seed_amount_left = ?, flight_duration = ?, speed = ?, task_completion_rate = ?
-      WHERE id = ?
+      UPDATE drones SET drone_id=?, model = ?, latitude = ?, longitude = ?, altitude = ?, battery_level = ?, task_status = ?, spray_amount_left = ?, seed_amount_left = ?, flight_duration = ?, speed = ?, task_completion_rate = ?
+      WHERE drone_id = ?
     `;
 
   db.query(
     query,
     [
+      drone_id,
       model,
       latitude,
       longitude,
